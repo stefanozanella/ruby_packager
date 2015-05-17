@@ -1,28 +1,30 @@
 #!/bin/bash
 
+mkdir $BUILD_DIR $PKG_DIR
+
 ruby-install \
-  --jobs=4 \
-  -i /opt/ruby/ \
-  ruby 2.1.2 \
+  --jobs=${BUILD_CPUS} \
+  -i ${INSTALL_DIR} \
+  ${RUBY_TYPE} ${RUBY_VERSION} \
   -- \
   --disable-install-doc \
 
-/opt/ruby/bin/gem install bundler --no-rdoc --no-ri
+${INSTALL_DIR}/bin/gem install bundler --no-rdoc --no-ri
 
-mkdir -p /target/opt/ruby
-mv /opt/ruby/* /target/opt/ruby
-mkdir -p /target/usr/bin
+mkdir -p ${BUILD_DIR}/${INSTALL_DIR}
+mv ${INSTALL_DIR}/* ${BUILD_DIR}/${INSTALL_DIR}
+mkdir -p ${BUILD_DIR}/usr/bin
 
-for binary in $(ls -1 /target/opt/ruby/bin)
+for binary in $(ls -1 ${BUILD_DIR}/${INSTALL_DIR}/bin)
 do
-  ln -s /opt/ruby/bin/$binary /target/usr/bin/$binary
+  ln -s ${INSTALL_DIR}/bin/$binary ${BUILD_DIR}/usr/bin/$binary
 done
 
 fpm \
   -s dir \
   -t deb \
-  -n ruby-runtime \
-  -v 2.1.2 \
+  -n ${PKG_NAME} \
+  -v ${RUBY_VERSION} \
   --iteration $(date +"%Y%m%d%H%M%S") \
   -m "Stefano Zanella <zanella.stefano@gmail.com>" \
   -d libgmp10 \
@@ -30,5 +32,6 @@ fpm \
   -d libssl \
   --replaces ruby \
   --description "Ruby interpreter and associated runtime. Bundler gem included." \
-  /target/=/
-mv *.deb /pkg
+  ${BUILD_DIR}/=/
+
+mv *.deb ${PKG_DIR}
