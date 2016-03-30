@@ -60,5 +60,5 @@ package; namely [ruby-install](https://github.com/postmodern/ruby-install)
 and [fpm](https://github.com/jordansissel/fpm/wiki).
 
 Provided configuration options are fed directly to those tools, so for
-furhter information about the available formats and supported values please
+further information about the available formats and supported values please
 refer to the linked documentation.
