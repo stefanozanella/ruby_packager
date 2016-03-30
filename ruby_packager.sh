@@ -29,7 +29,7 @@ fpm \
   -m "Stefano Zanella <zanella.stefano@gmail.com>" \
   -d libgmp10 \
   -d libyaml-0-2 \
-  -d libssl \
+  -d libssl1.0.0 \
   --replaces ruby \
   --description "Ruby interpreter and associated runtime. Bundler gem included." \
   ${BUILD_DIR}/=/
